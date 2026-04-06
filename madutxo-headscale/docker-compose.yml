@@ -1,12 +1,6 @@
 version: "3.7"
 
 services:
-  app_proxy:
-    environment:
-      APP_HOST: ${APP_MADUTXO_HEADSCALE_IP}
-      APP_PORT: ${APP_MADUTXO_HEADSCALE_PORT}
-      PROXY_AUTH_ADD: "false"
-
   server:
     init: true
     image: headscale/headscale:v0.28.0
@@ -15,11 +9,11 @@ services:
     network_mode: host
     volumes:
       - ${APP_DATA_DIR}/config:/etc/headscale:rw
-      - ${APP_DATA_DIR}/data:/var/lib/headscale:rw
     environment:
       - TZ=${TZ:-UTC}
       - HEADSCALE_CONFIG=/etc/headscale/config.yaml
-    command: serve
+    env_file:
+      - ${APP_DATA_DIR}/config/config.env
     labels:
       yantr.app: "madutxo-headscale"
       yantr.service: "Headscale Server"
