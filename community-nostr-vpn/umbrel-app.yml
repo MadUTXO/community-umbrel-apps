@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: nostr-vpn
+id: community-nostr-vpn
 category: networking
 name: Nostr VPN
 version: "v0.3.4"
