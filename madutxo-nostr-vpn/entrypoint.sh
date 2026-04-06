@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-# Create required directories with proper ownership
-# This runs as root before the USER switch
-mkdir -p /data/.config/nvpn
-chown -R 1000:1000 /data 2>/dev/null || true
+# Try to create directories, but don't fail if they exist or can't be created
+mkdir -p /data/.config/nvpn 2>/dev/null || true
+chmod 755 /data 2>/dev/null || true
 
 # Start the web interface
 exec /usr/local/bin/nvpn-web
