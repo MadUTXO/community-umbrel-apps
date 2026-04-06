@@ -20,9 +20,14 @@ description: >-
   - Peer-to-peer mesh networking
 developer: nostr-vpn contributors
 website: https://github.com/mmalmi/nostr-vpn
+submitter: MadUTXO
+submission: https://github.com/MadUTXO/community-umbrel-apps
 dependencies: []
 repo: https://github.com/mmalmi/nostr-vpn
 support: https://github.com/mmalmi/nostr-vpn/issues
 port: 8080
 gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
 releaseNotes: ""
