@@ -1,9 +1,15 @@
 version: "3.7"
 
 services:
+  app_proxy:
+    environment:
+      APP_HOST: ${APP_MADUTXO_NOSTR_VPN_IP}
+      APP_PORT: ${APP_MADUTXO_NOSTR_VPN_PORT}
+      PROXY_AUTH_ADD: "false"
+
   server:
     init: true
-    image: ghcr.io/umbrel-apps/nostr-vpn:0.3.4
+    image: ghcr.io/madutxo/nostr-vpn:0.3.4@sha256:3074cda0a72fcef8f5a7764841f63b0ab3d0b1de8e1f7ad47ca3448fae465b83
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 1m
