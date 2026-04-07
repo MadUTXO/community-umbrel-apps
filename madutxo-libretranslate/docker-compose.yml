@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   server:
-    image: libretranslate/libretranslate:v1.9.5
+    image: libretranslate/libretranslate:v1.7.0
     restart: on-failure
     stop_grace_period: 1m
     network_mode: host
