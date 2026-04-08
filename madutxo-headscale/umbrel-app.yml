@@ -7,20 +7,22 @@ version: "v0.28.0"
 tagline: Open source Tailscale control server
 description: >-
   Headscale is an open source implementation of the Tailscale control server.
-  It provides a self-hosted alternative to Tailscale's SaaS control server,
-  allowing you to run your own VPN coordination server.
+  It provides a self-hosted alternative to Tailscale's SaaS control server.
 
 
-  Quick Setup (one time):
-  1. Click the icon to open the Web UI (port 8083)
-  2. Run this command to get your API key:
-     docker exec madutxo-headscale_main_1 cat /var/lib/headscale/api_key.txt
-  3. In the Web UI:
-     - Enter API URL: http://<your-umbrel-ip>:8080
-     - Paste the API key
-  4. Create a pre-auth key in the Web UI
-  5. Connect devices:
-     tailscale up --login-server http://<your-umbrel-ip>:8080 --authkey <key>
+  Setup:
+  1. Click the icon to open Web UI (port 8083)
+  2. Enter API URL: http://<your-umbrel-ip>:8080
+  3. Get API key from file on your Umbrel server:
+     cat /path/to/umbrel-data/app-data/madutxo-headscale/data/api_key.txt
+  4. Or get pre-auth key from container logs:
+     docker logs madutxo-headscale_main_1 | grep -i key
+  5. Paste into Web UI and save
+  6. Create pre-auth keys in Web UI to connect devices
+
+
+  To connect a device:
+  tailscale up --login-server http://<your-ip>:8080 --authkey <pre-auth-key>
 developer: Headscale team
 website: https://headscale.net
 submitter: MadUTXO
