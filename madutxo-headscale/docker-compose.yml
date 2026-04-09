@@ -8,6 +8,8 @@ services:
 
   headscale:
     image: headscale/headscale:v0.28
+    user: "1000:1000"
+    init: true
     restart: on-failure
     stop_grace_period: 1m
     command: serve
@@ -20,6 +22,8 @@ services:
 
   ui:
     image: sergeyitsib/headscale-web:latest
+    user: "1000:1000"
+    init: true
     restart: on-failure
     stop_grace_period: 1m
     ports:
