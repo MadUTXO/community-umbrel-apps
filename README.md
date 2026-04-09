@@ -7,15 +7,14 @@ Add community-made apps to your Umbrel. Simple as that.
 ### Using the Umbrel Web Interface (Recommended)
 
 1. Open Umbrel in your browser (usually `http://umbrel.local`)
-2. Click **Settings** in the sidebar
-3. Go to **App Store**
-4. Click **Add App Store**
-5. Paste this URL:
+2. Click the **three dots** (⋮) in the top-right corner
+3. Select **Community App Stores**
+4. Paste this URL in the input field:
    ```
    https://github.com/MadUTXO/MadUTXO-Umbrel-App-Store
    ```
-6. Click **Add**
-7. Done! The apps will show up in your app store
+5. Click **Add**
+6. Browse your new community store from the App Store
 
 ### Using the Terminal
 
