@@ -1,130 +1,81 @@
 #!/bin/bash
 set -e
 
-DATA_DIR="/data"
+DATA_DIR="/var/lib/headscale"
+CONFIG_DIR="/etc/headscale"
 KEY_FILE="$DATA_DIR/api_key.txt"
-HTML_FILE="$DATA_DIR/setup.html"
-HS_SOCKET="/var/run/headscale/headscale.sock"
+COOKIE_FILE="$DATA_DIR/cookie_secret"
 
-echo "=== Headscale Setup Server ==="
-echo "Waiting for Headscale..."
+echo "=== Headscale First-Start Setup ==="
 
-# Wait for Headscale to be ready
-for i in $(seq 1 60); do
-    if [ -S "$HS_SOCKET" ]; then
-        echo "Headscale is ready!"
-        break
-    fi
-    sleep 1
-done
+mkdir -p "$DATA_DIR" "$CONFIG_DIR"
 
-# Give Headscale a moment to fully start
-sleep 3
+if [ ! -f "$CONFIG_DIR/config.yaml" ]; then
+    echo "Creating default config.yaml..."
+    cat > "$CONFIG_DIR/config.yaml" << EOF
+server:
+  listen_addr: 0.0.0.0:8080
+  metrics_listen_addr: 0.0.0.0:9090
+  grpc_listen_addr: 0.0.0.0:9090
+  grpc_allow_insecure: false
+  private_key_path: $DATA_DIR/private.key
+  noise:
+    private_key_path: $DATA_DIR/noise_private.key
+  tls_letsencrypt:
+    hostname: ""
+    challenge_type: ""
+  tls_cert_path: ""
+  tls_key_path: ""
+  base_domain: headscale.internal
+  ephemeral_node_inactivity_timeout: 30m
+  node_update_check_interval: 10s
+  db_type: sqlite3
+  db_path: $DATA_DIR/db.sqlite
+  acme_url: https://acme-v02.api.letsencrypt.org/directory
+  acme_email: ""
+  logs:
+    format: text
+    level: info
+  dns:
+    base_ip: 100.64.0.1
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+    magic_dns: true
+    base_domain: headscale.internal
+  unix_socket: $DATA_DIR/headscale.sock
+  unix_socket_permission: "0770"
+  grpc_socket_permission: "0770"
+EOF
+fi
 
-# Generate API key if not exists
 if [ ! -f "$KEY_FILE" ]; then
-    echo "Generating API key..."
-    KEY_OUTPUT=$(headscale -c /etc/headscale/config.yaml apikeys create --expiration 8760h 2>&1 || true)
-    KEY=$(echo "$KEY_OUTPUT" | grep -oP 'Key: \K[^\s]+' || echo "")
+    echo "Waiting for Headscale socket..."
+    for i in $(seq 1 30); do
+        if [ -S "$DATA_DIR/headscale.sock" ]; then
+            break
+        fi
+        sleep 2
+    done
     
-    if [ -n "$KEY" ]; then
-        echo "$KEY" > "$KEY_FILE"
-        chmod 600 "$KEY_FILE"
-        echo "API Key generated!"
-    else
-        echo "Warning: Could not extract key: $KEY_OUTPUT"
+    if [ -S "$DATA_DIR/headscale.sock" ]; then
+        echo "Generating API key..."
+        KEY=$(headscale -c "$CONFIG_DIR/config.yaml" apikeys create --expiration 8760h 2>&1 | grep -oP 'Key: \K[^\s]+' || true)
+        if [ -n "$KEY" ]; then
+            echo "$KEY" > "$KEY_FILE"
+            chmod 600 "$KEY_FILE"
+            echo "API key generated: ${KEY:0:20}..."
+        else
+            echo "Warning: Could not extract API key, will retry on next start"
+        fi
     fi
 fi
 
-# Read the key for the HTML
-if [ -f "$KEY_FILE" ]; then
-    API_KEY=$(cat "$KEY_FILE")
-else
-    API_KEY="Not ready. Check container logs."
+if [ ! -f "$COOKIE_FILE" ]; then
+    echo "Generating cookie secret..."
+    openssl rand -base64 24 > "$COOKIE_FILE"
+    chmod 600 "$COOKIE_FILE"
 fi
 
-# Create HTML page with embedded key
-cat > "$HTML_FILE" << HTMLEOF
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Headscale Setup</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-           max-width: 500px; margin: 40px auto; padding: 20px; background: #0f0f23; color: #eee; }
-    .box { background: #1a1a2e; padding: 24px; border-radius: 12px; }
-    h1 { color: #00d4ff; margin-top: 0; }
-    .step { background: #16213e; padding: 12px; border-radius: 8px; margin: 10px 0; }
-    .key { background: #0f3460; padding: 14px; border-radius: 8px; 
-           font-family: 'SF Mono', Monaco, monospace; word-break: break-all; margin: 16px 0; 
-           font-size: 14px; }
-    .btn { background: #00d4ff; color: #0f0f23; padding: 14px 24px; 
-           border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; 
-           font-weight: 600; }
-    .btn:hover { background: #00b8e6; }
-    .warn { background: #ff6b6b20; border-left: 3px solid #ff6b6b; 
-            padding: 12px; margin-top: 16px; font-size: 13px; }
-    code { background: #0f3460; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <div class="box">
-    <h1>Headscale Setup</h1>
-    
-    <div class="step">
-      <strong>Quick Guide:</strong><br>
-      1. Copy the API key below<br>
-      2. Open Web UI at port 8083<br>
-      3. Enter API URL: <code>http://YOUR_IP:8080</code><br>
-      4. Paste the key and save
-    </div>
-    
-    <div class="key" id="key">$API_KEY</div>
-    <button class="btn" onclick="copyKey()">📋 Copy API Key</button>
-    
-    <div class="warn" id="warn">
-      ⚠️ After copying, the key will be <strong>DELETED</strong> for security!
-    </div>
-  </div>
-  
-  <script>
-    let deleted = false;
-    async function copyKey() {
-      if (deleted) return;
-      
-      const key = document.getElementById('key').textContent.trim();
-      await navigator.clipboard.writeText(key);
-      
-      document.querySelector('.btn').textContent = '✓ Copied!';
-      deleted = true;
-      
-      // Delete the key
-      try {
-        await fetch('/delete', { method: 'POST' });
-      } catch(e) {}
-      
-      setTimeout(() => {
-        document.getElementById('key').textContent = '[DELETED FOR SECURITY]';
-        document.getElementById('warn').style.display = 'none';
-        document.querySelector('.btn').style.display = 'none';
-      }, 2000);
-    }
-  </script>
-</body>
-</html>
-HTMLEOF
-
-# Create delete script
-echo '#!/bin/sh' > "$DATA_DIR/delete"
-echo "rm -f $KEY_FILE $DATA_DIR/delete $HTML_FILE" >> "$DATA_DIR/delete"
-chmod +x "$DATA_DIR/delete"
-
-echo "========================================"
-echo "Setup page: http://127.0.0.1:8084"
-echo "========================================"
-
-# Start nginx on localhost only for security
-exec nginx -g 'daemon off;'
+echo "=== Starting Headscale ==="
+exec headscale -c "$CONFIG_DIR/config.yaml" serve
