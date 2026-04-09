@@ -7,9 +7,7 @@ services:
       APP_PORT: 80
 
   headscale:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: headscale/headscale:v0.28
     restart: on-failure
     stop_grace_period: 1m
     ports:
@@ -25,7 +23,7 @@ services:
     ports:
       - "9080:80"
     environment:
-      - HS_URL=http://127.0.0.1:8080
+      - HS_URL=http://host.docker.internal:8080
 
 volumes:
   data:
