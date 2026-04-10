@@ -2,7 +2,7 @@ manifestVersion: 1
 id: madtuxo-opencode
 category: developer
 name: OpenCode
-icon: https://ipfs.io/ipfs/Qma92doZsMdGrS46v8GqXCgvzomrXKZPm3fFgjmwd8k9RA
+icon: https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madtuxo-opencode/icon.png
 version: "latest"
 tagline: AI coding assistant in browser
 description: >-
@@ -15,4 +15,8 @@ dependencies: []
 repo: https://github.com/anomalyco/opencode
 support: https://github.com/anomalyco/opencode/issues
 port: 4096
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
 releaseNotes: "- Initial release"
