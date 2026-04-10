@@ -3,6 +3,7 @@ id: madtuxo-opencode
 category: developer
 name: OpenCode
 version: "latest"
+icon: https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madtuxo-opencode/icon.png
 tagline: AI coding assistant in browser
 description: >-
   OpenCode is an AI-powered browser IDE combining editor, terminal, and AI code support.
