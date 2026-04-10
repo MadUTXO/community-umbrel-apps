@@ -2,7 +2,6 @@ manifestVersion: 1
 id: madtuxo-opencode
 category: developer
 name: OpenCode
-icon: https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madtuxo-opencode/icon.png
 version: "latest"
 tagline: AI coding assistant in browser
 description: >-
