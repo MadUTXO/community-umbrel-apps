@@ -2,6 +2,8 @@ version: "3.7"
 
 services:
   app_proxy:
+    depends_on:
+      - orchard
     environment:
       APP_HOST: madutxo-orchard_orchard_1
       APP_PORT: 3321
@@ -12,8 +14,7 @@ services:
     init: true
     restart: on-failure
     stop_grace_period: 1m
-    ports:
-      - "3321:3321"
+    command: ["npm", "run", "start"]
     volumes:
       - ${APP_DATA_DIR}/data:/app/data
       - ${APP_BITCOIN_DATA_DIR}:/bitcoin:ro
