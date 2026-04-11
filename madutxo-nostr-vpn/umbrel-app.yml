@@ -1,5 +1,6 @@
 manifestVersion: 1
 id: madutxo-nostr-vpn
+disabled: true
 category: networking
 name: Nostr VPN
 icon: https://raw.githubusercontent.com/MadUTXO/community-umbrel-apps/master/madutxo-nostr-vpn/icon.svg
