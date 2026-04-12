@@ -3,7 +3,7 @@ id: madutxo-orchard
 category: finance
 name: Orchard
 icon: https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madutxo-orchard/icon.png
-version: "v1.8.1"
+version: "1.8.0"
 tagline: Your sovereign bank in cyberspace
 description: >-
   Orchard is a web application for Cashu mint management.
