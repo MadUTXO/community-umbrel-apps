@@ -21,9 +21,7 @@ developer: cashubtc
 website: https://orchard.space
 submitter: MadUTXO
 submission: https://github.com/MadUTXO/MadUTXO-Umbrel-App-Store
-dependencies:
-  - bitcoin
-  - lightning
+dependencies: []
 repo: https://github.com/cashubtc/orchard
 support: https://github.com/cashubtc/orchard/discussions
 port: 3321
