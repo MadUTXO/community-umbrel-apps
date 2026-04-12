@@ -5,11 +5,10 @@ services:
     depends_on:
       - orchard
     environment:
-      APP_HOST: madutxo-orchard-1
+      APP_HOST: madutxo-orchard_orchard_1
       APP_PORT: 3321
 
   orchard:
-    container_name: madutxo-orchard-1
     image: ghcr.io/cashubtc/orchard-mintdb-sqlite:latest
     user: "1000:1000"
     init: true
@@ -31,4 +30,3 @@ services:
 
 volumes:
   data:
-  mint-data:
