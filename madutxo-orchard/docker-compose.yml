@@ -9,13 +9,14 @@ services:
       APP_PORT: 3321
 
   orchard:
-    image: ghcr.io/cashubtc/orchard-mintdb-sqlite:latest@sha256:1c2b6e9256a4d60f6d48a50ec6a8a692ee6733c4f25dcf103211e64a2e551720
+    image: ghcr.io/cashubtc/orchard-mintdb-sqlite:latest
     user: "1000:1000"
     init: true
     restart: on-failure
     stop_grace_period: 1m
     volumes:
       - ${APP_DATA_DIR}/data:/app/data
+      - ${APP_DATA_DIR}/mint-data:/app/data/mint-data
     environment:
       TZ: ${TZ:-UTC}
       NODE_ENV: production
@@ -23,3 +24,10 @@ services:
       SERVER_PORT: "3321"
       DOCKER_ENV: "true"
       DATABASE_DIR: /app/data
+      MINT_DATANAME: mint.sqlite3
+      MINT_DATADIR: /app/data/mint-data
+      MINT_RPC_MTLS: "false"
+
+volumes:
+  data:
+  mint-data:
