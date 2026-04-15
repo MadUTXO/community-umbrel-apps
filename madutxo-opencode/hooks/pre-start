@@ -6,6 +6,8 @@ APP_DIR="$(readlink -f "${SCRIPT_DIR}/..")"
 APP_DATA_DIR="${APP_DIR}/data"
 
 mkdir -p "${APP_DATA_DIR}"
-chown -R 1000:1000 "${APP_DATA_DIR}"
+
+chmod -R 755 "${APP_DATA_DIR}" 2>/dev/null || true
+chown -R 1000:1000 "${APP_DATA_DIR}" 2>/dev/null || true
 
 exit 0
