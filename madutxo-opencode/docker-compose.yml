@@ -2,23 +2,17 @@ version: "3.7"
 
 services:
   app_proxy:
-    depends_on:
-      - server
     environment:
       APP_HOST: madutxo-opencode_server_1
       APP_PORT: 4096
 
   server:
-    image: ghcr.io/anomalyco/opencode:latest@sha256:49d027106268e57b6ea51e3bc1d244dd0c742fffab7fd5ff8af47c05892d88ea
-    user: "1000:1000"
-    init: true
-    command: ["web", "--hostname", "0.0.0.0", "--port", "4096"]
+    image: ghcr.io/anomalyco/opencode:latest
+    user: 1000:1000
     volumes:
-      - ${APP_DATA_DIR}/data:/home/opencode
+      - ${APP_DATA_DIR}/data:/data
     environment:
-      HOME: /home/opencode
-      BUN_CONFIG_HOME: /home/opencode/.bun
-      BUN_INSTALL_CACHE_DIR: /home/opencode/.bun-cache
+      HOME: /data
     restart: on-failure
     stop_grace_period: 1m
 
