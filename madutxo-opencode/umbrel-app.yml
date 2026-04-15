@@ -4,9 +4,18 @@ category: developer
 name: OpenCode
 icon: https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madutxo-opencode/icon.png
 version: "v1.5.0"
-tagline: AI coding assistant in browser
+tagline: The open source AI coding agent
 description: >-
-  OpenCode is an AI-powered browser IDE combining editor, terminal, and AI code support.
+  OpenCode is an open source AI coding agent designed to enhance your development
+  workflow across terminal, IDE, and desktop environments. Use it to chat about
+  code, generate changes, and execute sophisticated multi-session workflows
+  across your projects.
+
+  Key features include support for multiple AI model providers (including Claude,
+  GPT-4, and local models), intelligent context-aware code suggestions via LSP
+  integration, and the ability to perform complex refactoring tasks. OpenCode can
+  help you write new features, debug issues, refactor code, and explain
+  complex codebases in natural language.
 developer: Anomaly Co
 website: https://github.com/anomalyco/opencode
 submitter: MadUTXO
@@ -15,7 +24,10 @@ dependencies: []
 repo: https://github.com/anomalyco/opencode
 support: https://github.com/anomalyco/opencode/issues
 port: 4096
-gallery: []
+gallery:
+  - https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madutxo-opencode/gallery/1.png
+  - https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madutxo-opencode/gallery/2.png
+  - https://raw.githubusercontent.com/MadUTXO/MadUTXO-Umbrel-App-Store/master/madutxo-opencode/gallery/3.png
 path: ""
 defaultUsername: ""
 defaultPassword: ""
